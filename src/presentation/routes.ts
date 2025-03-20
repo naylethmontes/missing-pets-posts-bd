@@ -6,8 +6,8 @@ export class AppRoutes {
   static get routes(): Router {
     const router = Router();
 
-    router.use('/', UserRoutes.routes);
-    router.use('/', PetRoutes.routes);
+    router.use('/api/users/', UserRoutes.routes);
+    router.use('/api/petposts', PetRoutes.routes);
 
     return router;
   }

@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
-import { RegisterUserService } from '../users/services/register-user.service';
-import { LoginUserService } from './services/login-user.service';
-import { FinderUsersService } from './services/finder-users.service';
-import { UpdateUserService } from './services/update-user.service';
-import { EliminatorUserService } from './services/eliminator-user.service';
-import { FinderUserService } from './services/finder-user.service';
 import { CreateUserDto, CustomError, UpdateUserDto } from '../../domain';
+import {
+  EliminatorUserService,
+  FinderUserService,
+  FinderUsersService,
+  LoginUserService,
+  RegisterUserService,
+  UpdateUserService,
+} from './services';
 
 export class UserController {
   constructor(
@@ -35,8 +37,8 @@ export class UserController {
 
     this.registerUsers
       .execute(createUserDto!)
-      .then(() => {
-        res.status(200).json();
+      .then((user) => {
+        res.status(201).json(user);
       })
       .catch((err) => {
         this.handleError(err, res);
@@ -83,7 +85,7 @@ export class UserController {
     this.eliminatorUsers
       .execute(id)
       .then(() => {
-        res.status(204).json(null);
+        res.status(204).json();
       })
       .catch((err) => {
         this.handleError(err, res);

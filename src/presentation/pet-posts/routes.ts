@@ -30,19 +30,19 @@ export class PetRoutes {
       rejectPetPost
     );
 
-    router.post('/api/petposts', controller.creator);
+    router.post('/', controller.creator);
 
-    router.get('/api/petposts', controller.findAll);
+    router.get('/', controller.findAll);
 
-    router.get('/api/petposts/:id', controller.findOne);
+    router.get('/:id', controller.findOne);
 
-    router.patch('/api/petposts/:id', controller.update);
+    router.patch('/:id', controller.update);
 
-    router.delete('/api/petposts/:id', controller.eliminator);
+    router.delete('/:id', controller.eliminator);
 
-    router.patch('/api/petposts/:id/approve', controller.approve);
+    router.patch('/:id/approve', controller.approve);
 
-    router.patch('/api/petposts/:id/reject', controller.reject);
+    router.patch('/:id/reject', controller.reject);
 
     return router;
   }

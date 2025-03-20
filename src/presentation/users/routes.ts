@@ -26,17 +26,17 @@ export class UserRoutes {
       finderUser
     );
 
-    router.get('/api/users', controller.findAll);
+    router.get('/', controller.findAll);
 
-    router.post('/api/users/register', controller.register);
+    router.post('/register', controller.register);
 
-    router.post('/api/users/login', controller.login);
+    router.post('/login', controller.login);
 
-    router.get('/api/users/:id/', controller.findOne);
+    router.get('/:id', controller.findOne);
 
-    router.patch('/api/users/:id', controller.update);
+    router.patch('/:id', controller.update);
 
-    router.delete('/api/users/:id', controller.eliminator);
+    router.delete('/:id', controller.eliminator);
 
     return router;
   }

@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import { CreatorPetService } from './services/creator-pet-post.service';
-import { FinderPetPostsService } from './services/finder-pet-posts.service';
-import { FinderPetService } from './services/finder-pet-post.service';
-import { UpdatePetService } from './services/update-pet-post.service';
-import { EliminatorPetService } from './services/eliminator-pet-post.service';
-import { ApprovePetPostService } from './services/approve-pet-post.service';
-import { RejectPetPostService } from './services/reject-pet-post.service';
-import { CustomError } from '../../domain';
-import { CreatePetDto } from '../../domain/dtos/post-pet/create-post.dto';
-import { UpdatePostDto } from '../../domain/dtos/post-pet/update.post.dto';
+import {
+  ApprovePetPostService,
+  CreatorPetService,
+  EliminatorPetService,
+  FinderPetPostsService,
+  FinderPetService,
+  RejectPetPostService,
+  UpdatePetService,
+} from './services';
+import { CreatePetDto, CustomError, UpdatePostDto } from '../../domain';
 
 export class PetController {
   constructor(
@@ -31,19 +31,19 @@ export class PetController {
   };
 
   creator = (req: Request, res: Response) => {
-    const [error, createUserDto] = CreatePetDto.execute(req.body);
+    const [error, createPetDto] = CreatePetDto.execute(req.body);
 
     if (error) {
       return res.status(422).json({ message: error });
     }
 
     this.creatorPets
-      .execute(createUserDto!)
-      .then((result) => {
-        res.status(200).json({ message: result });
+      .execute(createPetDto!)
+      .then((pet) => {
+        res.status(201).json(pet);
       })
       .catch((err) => {
-        res.status(500).json({ message: err.message });
+        this.handleError(err, res);
       });
   };
 

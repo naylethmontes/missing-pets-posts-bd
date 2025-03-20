@@ -1,6 +1,5 @@
 import { PetsPost } from '../../../data';
-import { CustomError } from '../../../domain';
-import { CreatePetDto } from '../../../domain/dtos/post-pet/create-post.dto';
+import { CustomError, CreatePetDto } from '../../../domain';
 
 export class CreatorPetService {
   async execute(petData: CreatePetDto) {
@@ -9,11 +8,12 @@ export class CreatorPetService {
     pet.pet_name = petData.pet_name;
     pet.description = petData.description;
     pet.owner = petData.owner;
+    pet.image_url = petData.image_url;
 
     try {
       await pet.save();
       return {
-        message: 'User created successfully',
+        message: 'Pet created successfully',
       };
     } catch (error: any) {
       this.throwException(error);
@@ -22,8 +22,9 @@ export class CreatorPetService {
 
   private throwException(error: any) {
     if (error.code === '23505') {
-      throw CustomError.conflict('Description already in use');
+      throw CustomError.conflict('Pet name already in use');
     }
+
     if (error.code === '22P02') {
       throw CustomError.unprocessableEntity('Invalid date type');
     }

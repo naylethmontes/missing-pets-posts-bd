@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  BaseEntity,
-  CreateDateColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 
 export enum PetsPostStatus {
   PENDING = 'pending',
@@ -17,24 +11,44 @@ export class PetsPost extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column('varchar', {
+    length: 50,
+    nullable: false,
+    unique: true,
+  })
   pet_name: string;
 
-  @Column({ type: 'text' })
+  @Column('text', {
+    nullable: false,
+  })
   description: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+  })
   image_url: string;
 
-  @Column({ type: 'enum', enum: PetsPostStatus, default: 'pending' })
+  @Column('enum', {
+    enum: PetsPostStatus,
+    default: PetsPostStatus.PENDING,
+  })
   status: PetsPostStatus;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column('varchar', {
+    length: 255,
+  })
   owner: string;
 
-  @Column({ type: 'boolean', default: false })
+  @Column('boolean', {
+    default: true,
+    nullable: false,
+  })
   hasFound: boolean;
 
-  @CreateDateColumn()
+  @Column('timestamp', {
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: false,
+  })
   created_at: Date;
 }

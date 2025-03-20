@@ -1,10 +1,5 @@
 import { regularExp } from '../../../config';
 
-enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user',
-}
-
 export class CreateUserDto {
   constructor(
     public name: string,
