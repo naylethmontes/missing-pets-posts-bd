@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
-import { CreateUserDto, CustomError, UpdateUserDto } from '../../domain';
+import {
+  CreateUserDto,
+  CustomError,
+  LoginUserDto,
+  UpdateUserDto,
+} from '../../domain';
 import {
   EliminatorUserService,
   FinderUserService,
@@ -8,6 +13,7 @@ import {
   RegisterUserService,
   UpdateUserService,
 } from './services';
+import { envs } from '../../config';
 
 export class UserController {
   constructor(
@@ -25,6 +31,7 @@ export class UserController {
     }
 
     console.error(error);
+    console.log(error);
     return res.status(500).json({ message: 'Something went very wrong💣' });
   };
 
@@ -37,28 +44,36 @@ export class UserController {
 
     this.registerUsers
       .execute(createUserDto!)
-      .then((user) => {
-        res.status(201).json(user);
-      })
-      .catch((err) => {
-        this.handleError(err, res);
-      });
+      .then((user) => res.status(201).json(user))
+      .catch((err) => this.handleError(err, res));
   };
 
   login = (req: Request, res: Response) => {
-    this.loginUsers;
-    return res.status(501).json({ message: 'no yet implemented' });
+    const [error, loginUserDto] = LoginUserDto.execute(req.body);
+    if (error) {
+      return res.status(422).json({ message: error });
+    }
+
+    this.loginUsers
+      .execute(loginUserDto!)
+      .then((data) => {
+        res.cookie('token', data.token, {
+          httpOnly: true,
+          secure: envs.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 3 * 60 * 60 * 1000,
+        });
+
+        return res.status(200).json({ user: data.user });
+      })
+      .catch((err) => this.handleError(err, res));
   };
 
   findAll = (req: Request, res: Response) => {
     this.finderUsers
       .execute()
-      .then((users) => {
-        res.status(200).json(users);
-      })
-      .catch((err) => {
-        this.handleError(err, res);
-      });
+      .then((users) => res.status(200).json(users))
+      .catch((err) => this.handleError(err, res));
   };
 
   update = (req: Request, res: Response) => {
@@ -72,24 +87,16 @@ export class UserController {
     this.updateUsers
       .execute(id, updateUserDto!)
 
-      .then((user) => {
-        res.status(200).json(user);
-      })
-      .catch((err) => {
-        this.handleError(err, res);
-      });
+      .then((user) => res.status(200).json(user))
+      .catch((err) => this.handleError(err, res));
   };
 
   eliminator = (req: Request, res: Response) => {
     const { id } = req.params;
     this.eliminatorUsers
       .execute(id)
-      .then(() => {
-        res.status(204).json();
-      })
-      .catch((err) => {
-        this.handleError(err, res);
-      });
+      .then(() => res.status(204).json(null))
+      .catch((err) => this.handleError(err, res));
   };
 
   findOne = (req: Request, res: Response) => {
@@ -100,4 +107,13 @@ export class UserController {
       .then((user) => res.status(200).json(user))
       .catch((err) => this.handleError(err, res));
   };
+
+  /*validateAccount = (req: Request, res: Response) => {
+    const { token } = req.params;
+
+    this.registerUsers
+      .validateAccount(token)
+      .then(() => res.send('Email validated sucessfully'))
+      .catch((err) => this.handleError(err, res));
+  };*/
 }
