@@ -91,7 +91,7 @@ export class PetController {
     this.eliminatorPets
       .execute(id)
       .then((result) => {
-        res.status(200).json({ message: result });
+        res.status(204).json({ message: result });
       })
       .catch((err) => {
         this.handleError(err, res);
@@ -99,9 +99,11 @@ export class PetController {
   };
 
   approve = (req: Request, res: Response) => {
+    const { id } = req.body;
+
     this.approvePetPost
-      .execute()
-      .then((pet) => res.status(201).json(pet))
+      .execute(id)
+      .then((post) => res.status(201).json(post))
       .catch(() => res.status(200).json({}));
   };
 

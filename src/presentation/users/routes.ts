@@ -7,7 +7,7 @@ import { EliminatorUserService } from './services/eliminator-user.service';
 import { FinderUserService } from './services/finder-user.service';
 import { LoginUserService } from './services/login-user.service';
 import { AuthMiddleware } from '../middlewares/auth.middleware';
-import { UserRole } from '../../data';
+import { User, UserRole } from '../../data';
 
 export class UserRoutes {
   static get routes(): Router {
@@ -43,11 +43,23 @@ export class UserRoutes {
 
     router.use(AuthMiddleware.protect);
 
-    router.get('/', controller.findAll);
+    router.get(
+      '/',
+      AuthMiddleware.restrictTo(UserRole.ADMIN),
+      controller.findAll
+    );
 
-    router.get('/:id', controller.findOne);
+    router.get(
+      '/:id',
+      AuthMiddleware.restrictTo(UserRole.USER),
+      controller.findOne
+    );
 
-    router.patch('/:id', controller.update);
+    router.patch(
+      '/:id',
+      AuthMiddleware.restrictTo(UserRole.USER),
+      controller.update
+    );
 
     router.delete(
       '/:id',
