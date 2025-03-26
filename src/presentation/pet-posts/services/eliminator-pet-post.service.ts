@@ -2,8 +2,8 @@ import { PetsPost } from '../../../data';
 import { CustomError } from '../../../domain';
 
 export class EliminatorPetService {
-  async execute(petId: string) {
-    const pet = await this.ensureUserExists(petId);
+  async execute(id: string) {
+    const pet = await this.ensureUserExists(id);
 
     pet.hasFound = false;
 
@@ -14,17 +14,17 @@ export class EliminatorPetService {
     }
   }
 
-  private async ensureUserExists(petId: string) {
+  private async ensureUserExists(id: string) {
     const pet = await PetsPost.findOne({
       select: ['id'],
       where: {
-        id: petId,
+        id: id,
         hasFound: true,
       },
     });
 
     if (!pet) {
-      throw CustomError.notFound(`User with id: ${petId} not found`);
+      throw CustomError.notFound(`User with id: ${id} not found`);
     }
 
     return pet;

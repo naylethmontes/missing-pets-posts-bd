@@ -2,8 +2,8 @@ import { User } from '../../../data';
 import { CustomError } from '../../../domain';
 
 export class EliminatorUserService {
-  async execute(userId: string) {
-    const user = await this.ensureUserExists(userId);
+  async execute(id: string) {
+    const user = await this.ensureUserExists(id);
 
     user.status = false;
 
@@ -14,17 +14,17 @@ export class EliminatorUserService {
     }
   }
 
-  private async ensureUserExists(userId: string) {
+  private async ensureUserExists(id: string) {
     const user = await User.findOne({
       select: ['id'],
       where: {
-        id: userId,
+        id: id,
         status: true,
       },
     });
 
     if (!user) {
-      throw CustomError.notFound(`User with id: ${userId} not found`);
+      throw CustomError.notFound(`User with id: ${id} not found`);
     }
 
     return user;

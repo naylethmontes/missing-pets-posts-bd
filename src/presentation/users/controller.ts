@@ -92,9 +92,8 @@ export class UserController {
   };
 
   eliminator = (req: Request, res: Response) => {
-    const { id } = req.params;
     this.eliminatorUsers
-      .execute(id)
+      .execute(req.params.id)
       .then(() => res.status(204).json(null))
       .catch((err) => this.handleError(err, res));
   };

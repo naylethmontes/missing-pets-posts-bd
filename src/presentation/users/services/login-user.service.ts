@@ -4,16 +4,15 @@ import { CustomError, LoginUserDto } from '../../../domain';
 
 export class LoginUserService {
   async execute(credentials: LoginUserDto) {
-    //1. Check if the user exists
     const user = await this.ensureUserExists(credentials.email);
-    //2. Check if the password is correct
+
     this.ensurePasswordIsCorrect(credentials.password, user!.password);
-    //3. Generate a token
+
     const token = await this.generateToken(
       { id: user!.id },
       envs.JWT_EXPIRE_IN
     );
-    //4. Return the token
+
     return {
       token,
       user: {

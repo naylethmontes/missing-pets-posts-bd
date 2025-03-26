@@ -87,9 +87,8 @@ export class PetController {
   };
 
   eliminator = (req: Request, res: Response) => {
-    const { id } = req.params;
     this.eliminatorPets
-      .execute(id)
+      .execute(req.params.id)
       .then((result) => {
         res.status(204).json({ message: result });
       })
@@ -99,18 +98,20 @@ export class PetController {
   };
 
   approve = (req: Request, res: Response) => {
-    const { id } = req.body;
-
     this.approvePetPost
-      .execute(id)
-      .then((post) => res.status(201).json(post))
-      .catch(() => res.status(200).json({}));
+      .execute(req.params.id)
+      .then((data) => res.status(200).json(data))
+      .catch((err) => {
+        this.handleError(err, res);
+      });
   };
 
   reject = (req: Request, res: Response) => {
     this.rejectPetPost
-      .execute()
-      .then((pet) => res.status(201).json(pet))
-      .catch(() => res.status(200).json({}));
+      .execute(req.params.id)
+      .then((data) => res.status(200).json(data))
+      .catch((err) => {
+        this.handleError(err, res);
+      });
   };
 }

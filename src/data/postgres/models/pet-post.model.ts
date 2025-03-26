@@ -41,7 +41,7 @@ export class PetsPost extends BaseEntity {
   owner: string;
 
   @Column('boolean', {
-    default: true,
+    default: false,
     nullable: false,
   })
   hasFound: boolean;

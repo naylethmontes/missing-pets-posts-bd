@@ -1,25 +1,34 @@
+import { PetsPost, PetsPostStatus } from '../../../data';
+import { CustomError } from '../../../domain';
+
 export class ApprovePetPostService {
-  async execute(postId: string) {
-    return {
-      message: 'post reject pet service works',
-    };
-  }
-  /*try {
-      const post = await PetsPost.findOne({
-        where: { id: postId },
-      });
-      if (!post) {
-        throw CustomError.notFound('Post no found');
-      }
+  async execute(id: string) {
+    const petPost = await this.findOnePetPostPendig(id);
 
-      post.status = PetsPostStatus.APPROVED;
-      await post.save();
+    petPost.status = PetsPostStatus.APPROVED;
 
+    try {
+      await petPost.save();
       return {
-        message: 'Post Approved successfully',
+        message: 'Pet post approve successfully ',
       };
     } catch (error) {
-      throw CustomError.internalServer('Error trying to change post');
+      throw CustomError.internalServer('error approving pet post');
     }
-  }*/
+  }
+
+  private async findOnePetPostPendig(id: string) {
+    const petPost = await PetsPost.findOne({
+      where: {
+        id: id,
+        status: PetsPostStatus.PENDING,
+      },
+    });
+
+    if (!petPost) {
+      throw CustomError.notFound('Pet post not found');
+    }
+
+    return petPost;
+  }
 }

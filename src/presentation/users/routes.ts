@@ -39,8 +39,6 @@ export class UserRoutes {
 
     router.post('/login', controller.login);
 
-    router.get('/validate-account/:token');
-
     router.use(AuthMiddleware.protect);
 
     router.get(
@@ -57,7 +55,7 @@ export class UserRoutes {
 
     router.patch(
       '/:id',
-      AuthMiddleware.restrictTo(UserRole.USER),
+      AuthMiddleware.restrictTo(UserRole.ADMIN),
       controller.update
     );
 
