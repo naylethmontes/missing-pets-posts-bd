@@ -1,4 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { PetsPost } from './pet-post.model';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -14,7 +22,7 @@ export class User extends BaseEntity {
     length: 50,
     nullable: false,
   })
-  name: string;
+  fullName: string;
 
   @Column('varchar', {
     length: 255,
@@ -47,4 +55,10 @@ export class User extends BaseEntity {
     nullable: false,
   })
   created_at: Date;
+
+  @OneToMany(() => PetsPost, (pet) => pet.user)
+  pet: PetsPost[];
+
+  @OneToOne(() => PetsPost, (petPost) => petPost.user)
+  petPost: PetsPost;
 }

@@ -5,17 +5,24 @@ export class FinderPetPostsService {
   async execute() {
     try {
       return await PetsPost.find({
-        select: [
+        relations: ['user'],
+        select: {
+          user: {
+            fullName: true,
+            email: true,
+          },
+        },
+        where: {
+          hasFound: true,
+        },
+        /*select: [
           'id',
           'pet_name',
           'description',
           'owner',
           'image_url',
           'created_at',
-        ],
-        where: {
-          hasFound: true,
-        },
+        ],*/
       });
     } catch (error) {
       throw CustomError.internalServer('Error trying to finder users');

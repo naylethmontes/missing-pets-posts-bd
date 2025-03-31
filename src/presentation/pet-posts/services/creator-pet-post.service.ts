@@ -1,19 +1,25 @@
-import { PetsPost } from '../../../data';
+import { PetsPost, User } from '../../../data';
 import { CustomError, CreatePetDto } from '../../../domain';
+import { FinderUserService } from '../../users/services';
 
 export class CreatorPetService {
+  constructor(private readonly finderUserService: FinderUserService) {}
+
   async execute(petData: CreatePetDto) {
     const pet = new PetsPost();
+
+    const user = await this.finderUserService.execute(petData.user_id);
 
     pet.pet_name = petData.pet_name;
     pet.description = petData.description;
     pet.owner = petData.owner;
     pet.image_url = petData.image_url;
+    pet.user = user;
 
     try {
       await pet.save();
       return {
-        message: 'Pet created successfully',
+        message: 'Post created successfully',
       };
     } catch (error: any) {
       this.throwException(error);

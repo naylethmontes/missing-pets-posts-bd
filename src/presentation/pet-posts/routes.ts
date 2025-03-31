@@ -8,13 +8,15 @@ import { EliminatorPetService } from './services/eliminator-pet-post.service';
 import { ApprovePetPostService } from './services/approve-pet-post.service';
 import { RejectPetPostService } from './services/reject-pet-post.service';
 import { AuthMiddleware } from '../middlewares/auth.middleware';
-import { User, UserRole } from '../../data';
+import { UserRole } from '../../data';
+import { FinderUserService } from '../users/services';
 
 export class PetRoutes {
   static get routes(): Router {
     const router = Router();
 
-    const creatorPets = new CreatorPetService();
+    const finderUserService = new FinderUserService();
+    const creatorPets = new CreatorPetService(finderUserService);
     const finderPetPosts = new FinderPetPostsService();
     const finderPets = new FinderPetService();
     const updatePets = new UpdatePetService();

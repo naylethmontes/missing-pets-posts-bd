@@ -2,15 +2,15 @@ import { regularExp } from '../../../config';
 
 export class CreateUserDto {
   constructor(
-    public name: string,
+    public fullName: string,
     public password: string,
     public email: string
   ) {}
 
   static execute(object: { [key: string]: any }): [string?, CreateUserDto?] {
-    const { name, password, email } = object;
+    const { fullName, password, email } = object;
 
-    if (!name) return ['name is required'];
+    if (!fullName) return ['full name is required'];
     if (!password) return ['password is required'];
     if (!regularExp.password.test(password))
       return ['format password is invalid'];
@@ -21,7 +21,7 @@ export class CreateUserDto {
     return [
       undefined,
       new CreateUserDto(
-        name.trim().toLowerCase(),
+        fullName.trim().toLowerCase(),
         password.trim(),
         email.trim().toLowerCase()
       ),

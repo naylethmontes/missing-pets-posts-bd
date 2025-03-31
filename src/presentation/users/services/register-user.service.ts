@@ -6,7 +6,7 @@ export class RegisterUserService {
   async execute(userData: CreateUserDto) {
     const user = new User();
 
-    user.name = userData.name;
+    user.fullName = userData.fullName;
     user.password = this.encriptPassword(userData.password);
     user.email = userData.email;
 
