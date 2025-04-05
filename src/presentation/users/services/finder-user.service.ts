@@ -4,7 +4,7 @@ import { CustomError } from '../../../domain';
 export class FinderUserService {
   async execute(userId: string) {
     const user = await User.findOne({
-      select: ['id', 'name', 'email', 'rol'],
+      select: ['id', 'fullName', 'email', 'rol'],
       where: {
         id: userId,
         status: true,

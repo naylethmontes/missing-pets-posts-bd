@@ -8,6 +8,7 @@ export class FinderPetPostsService {
         relations: ['user'],
         select: {
           user: {
+            id: true,
             fullName: true,
             email: true,
           },

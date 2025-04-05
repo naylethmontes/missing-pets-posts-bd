@@ -5,7 +5,7 @@ export class UpdateUserService {
   async execute(userId: string, userData: UpdateUserDto) {
     const user = await this.ensureUserExists(userId);
 
-    user.name = userData.name;
+    user.fullName = userData.fullName;
     user.email = userData.email;
 
     try {
